@@ -3,7 +3,9 @@ project(RTRT)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(RTRT src/main.cpp)
+add_executable(RTRT src/main.cpp
+        src/fileio.cpp
+        src/fileio.h)
 
 find_package(glad CONFIG REQUIRED)
 target_link_libraries(RTRT PRIVATE glad::glad)

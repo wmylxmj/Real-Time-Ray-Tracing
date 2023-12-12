@@ -1,10 +1,17 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+#include "fileio.h"
 
 void framebufferSizeChanged(GLFWwindow *glfwWindow, int width, int height);
 void processInput(GLFWwindow *glfwWindow);
 
 int main() {
+    ImportModel(R"(G:\Model3D\9934070\9934070.obj)");
+
     //初始化glfw
     if (!glfwInit()) {
         return -1;
