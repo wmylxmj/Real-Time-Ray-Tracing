@@ -11,7 +11,7 @@ int main() {
     }
 
     //创建窗口
-    GLFWwindow *glfwWindow = glfwCreateWindow(640, 480, "glfw_window", NULL, NULL);
+    GLFWwindow *glfwWindow = glfwCreateWindow(640, 480, "glfw_window", nullptr, nullptr);
     if (!glfwWindow) {
         glfwTerminate();
         return -1;
@@ -31,7 +31,7 @@ int main() {
     while(!glfwWindowShouldClose(glfwWindow)) {
         processInput(glfwWindow);
         glClear(GL_COLOR_BUFFER_BIT);
-        glClearColor(1.0, 1.0, 0, 1.0);
+        glClearColor(0, 0, 0, 1.0);
         glfwSwapBuffers(glfwWindow);
         glfwPollEvents();
     }
