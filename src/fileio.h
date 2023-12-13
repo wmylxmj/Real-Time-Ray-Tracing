@@ -10,6 +10,21 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <iostream>
+#include <glad/glad.h>
+
+typedef struct {
+    glm::vec3 position;
+    glm::vec3 normal;
+    glm::vec2 textureCoord;
+    glm::vec3 tangent;
+    glm::vec3 bitangent;
+} Vertex;
+
+typedef struct {
+    GLuint id;
+    std::string type;
+    std::string pFile;
+} Texture;
 
 extern bool ImportModel(const std::string& pFile);
 
