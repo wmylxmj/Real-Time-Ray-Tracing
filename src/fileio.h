@@ -11,6 +11,7 @@
 #include <assimp/postprocess.h>
 #include <iostream>
 #include <glad/glad.h>
+#include <vector>
 
 typedef struct {
     glm::vec3 position;
@@ -22,7 +23,7 @@ typedef struct {
 
 typedef struct {
     GLuint id;
-    std::string type;
+    aiTextureType type;
     std::string pFile;
 } Texture;
 

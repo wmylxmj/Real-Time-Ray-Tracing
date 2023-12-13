@@ -10,7 +10,6 @@ void framebufferSizeChanged(GLFWwindow *glfwWindow, int width, int height);
 void processInput(GLFWwindow *glfwWindow);
 
 int main() {
-    ImportModel(R"(G:\Model3D\9934070\9934070.obj)");
 
     //初始化glfw
     if (!glfwInit()) {
@@ -33,6 +32,8 @@ int main() {
         glfwTerminate();
         return -1;
     }
+
+    ImportModel(R"(G:\LearnOpenGL-master\LearnOpenGL-master\resources\objects\backpack\backpack.obj)");
 
     //消息循环
     while(!glfwWindowShouldClose(glfwWindow)) {

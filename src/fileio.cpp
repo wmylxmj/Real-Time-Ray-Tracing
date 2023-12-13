@@ -9,6 +9,8 @@
 
 void SceneProcessing(const aiScene* scene);
 void NodeProcessing(aiNode* node, const aiScene* scene);
+void MeshProcessing(aiMesh* mesh, const aiScene* scene);
+std::vector<Texture> LoadMaterialTextures(aiMaterial *material, aiTextureType textureType);
 
 bool ImportModel(const std::string& pFile) {
     Assimp::Importer importer;
@@ -34,7 +36,22 @@ void SceneProcessing(const aiScene* scene) {
 }
 
 void NodeProcessing(aiNode* node, const aiScene* scene) {
+    for(unsigned int i = 0; i < node->mNumMeshes; i++) {
+        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+        MeshProcessing(mesh, scene);
+    }
+    for(unsigned int i = 0; i < node->mNumChildren; i++)
+    {
+        NodeProcessing(node->mChildren[i], scene);
+    }
+}
 
+void MeshProcessing(aiMesh* mesh, const aiScene* scene) {
+    aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+    std::vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE);
+    //std::vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR);
+    //std::vector<Texture> normalMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT);
+    //std::vector<Texture> heightMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT);
 }
 
 GLuint LoadTexture(const char* pFile) {
@@ -58,6 +75,8 @@ GLuint LoadTexture(const char* pFile) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        std::cout << "Loaded texture: " << pFile << std::endl;
     }
     else {
         std::cout << "Cannot load texture: " << pFile << std::endl;
@@ -66,4 +85,31 @@ GLuint LoadTexture(const char* pFile) {
     stbi_image_free(image);
 
     return textureID;
+}
+
+std::vector<Texture> LoadMaterialTextures(aiMaterial *material, aiTextureType textureType) {
+    std::vector<Texture> textures;
+    std::vector<Texture> texturesLoaded;
+    for(unsigned int i = 0; i < material->GetTextureCount(textureType); i++) {
+        aiString path;
+        material->GetTexture(textureType, i, &path);
+        bool loaded = false;
+        for (auto & j : texturesLoaded) {
+            if(std::strcmp(j.pFile.data(), path.C_Str()) == 0)
+            {
+                textures.push_back(j);
+                loaded = true;
+                break;
+            }
+        }
+        if (!loaded) {
+            Texture texture;
+            texture.id = LoadTexture(path.C_Str());
+            texture.type = textureType;
+            texture.pFile = path.C_Str();
+            textures.push_back(texture);
+            texturesLoaded.push_back(texture);
+        }
+    }
+    return textures;
 }
