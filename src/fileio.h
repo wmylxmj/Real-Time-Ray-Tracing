@@ -27,6 +27,19 @@ typedef struct {
     std::string pFile;
 } Texture;
 
-extern bool ImportModel(const std::string& pFile);
+class Model {
+private:
+    std::string _directory;
+    std::vector<Texture> _textures;
+
+    void SceneProcessing(const aiScene* scene);
+    void NodeProcessing(aiNode* node, const aiScene* scene);
+    void MeshProcessing(aiMesh* mesh, const aiScene* scene);
+    std::vector<Texture> LoadMaterialTextures(aiMaterial *material, aiTextureType textureType);
+
+public:
+    explicit Model(std::string pFile);
+
+};
 
 #endif //RTRT_FILEIO_H

@@ -33,7 +33,7 @@ int main() {
         return -1;
     }
 
-    ImportModel(R"(G:\LearnOpenGL-master\LearnOpenGL-master\resources\objects\backpack\backpack.obj)");
+    Model model(R"(G:\LearnOpenGL-master\LearnOpenGL-master\resources\objects\backpack\backpack.obj)");
 
     //消息循环
     while(!glfwWindowShouldClose(glfwWindow)) {
