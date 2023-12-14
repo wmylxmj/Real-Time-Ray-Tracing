@@ -7,12 +7,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-void MeshProcessing(aiMesh* mesh, const aiScene* scene);
-
 void Model::SceneProcessing(const aiScene *scene) {
     NodeProcessing(scene->mRootNode, scene);
 }
-
 
 void Model::NodeProcessing(aiNode* node, const aiScene* scene) {
     for(unsigned int i = 0; i < node->mNumMeshes; i++) {

@@ -10,6 +10,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <vector>
 
 typedef struct {
     glm::vec3 position;
@@ -24,5 +25,16 @@ typedef struct {
     aiTextureType type;
     std::string pFile;
 } Texture;
+
+class Mesh {
+public:
+    std::vector<Vertex> vertices;
+    std::vector<Texture> textures;
+    std::vector<GLuint> indices;
+    GLuint VAO;
+
+private:
+    GLuint VBO, EBO;
+};
 
 #endif //RTRT_MESH_H
