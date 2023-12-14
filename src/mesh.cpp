@@ -36,9 +36,9 @@ void Mesh::setupGL() {
     glBindVertexArray(0);
 }
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures) {
-    this->vertices = std::move(vertices);
-    this->indices = std::move(indices);
-    this->textures = std::move(textures);
+Mesh::Mesh(std::vector<Vertex> &&vertices, std::vector<GLuint> &&indices, std::vector<Texture> &&textures) {
+    this->vertices = vertices;
+    this->indices = indices;
+    this->textures = textures;
     setupGL();
 }
