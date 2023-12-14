@@ -4,6 +4,8 @@
 
 #include "mesh.h"
 
+#include <utility>
+
 void Mesh::setupGL() {
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -32,4 +34,11 @@ void Mesh::setupGL() {
     glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitangent));
 
     glBindVertexArray(0);
+}
+
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures) {
+    this->vertices = std::move(vertices);
+    this->indices = std::move(indices);
+    this->textures = std::move(textures);
+    setupGL();
 }
