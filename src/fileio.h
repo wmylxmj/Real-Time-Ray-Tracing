@@ -5,27 +5,9 @@
 #ifndef RTRT_FILEIO_H
 #define RTRT_FILEIO_H
 
-#include <glm/glm.hpp>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 #include <iostream>
-#include <glad/glad.h>
 #include <vector>
-
-typedef struct {
-    glm::vec3 position;
-    glm::vec3 normal;
-    glm::vec2 textureCoord;
-    glm::vec3 tangent;
-    glm::vec3 bitangent;
-} Vertex;
-
-typedef struct {
-    GLuint id;
-    aiTextureType type;
-    std::string pFile;
-} Texture;
+#include "mesh.h"
 
 class Model {
 private:
