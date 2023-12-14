@@ -35,6 +35,7 @@ public:
 
 private:
     GLuint VBO, EBO;
+    void setupGL();
 };
 
 #endif //RTRT_MESH_H
