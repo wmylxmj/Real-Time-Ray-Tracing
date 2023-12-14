@@ -4,8 +4,6 @@
 
 #include "mesh.h"
 
-#include <utility>
-
 void Mesh::setupGL() {
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
