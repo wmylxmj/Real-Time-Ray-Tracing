@@ -7,6 +7,26 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+Model::Model(std::string pFile) {
+    Assimp::Importer importer;
+    unsigned int pFlag = aiProcess_CalcTangentSpace |
+                         aiProcess_Triangulate |
+                         aiProcess_JoinIdenticalVertices |
+                         aiProcess_SortByPType;
+
+    const aiScene *scene = importer.ReadFile(pFile, pFlag);
+
+    if (scene == nullptr) {
+        std::cout << importer.GetErrorString() << std::endl;
+        return;
+    }
+
+    std::replace(pFile.begin(), pFile.end(), '\\', '/');
+    _directory = pFile.substr(0, pFile.find_last_of('/') + 1);
+
+    SceneProcessing(scene);
+}
+
 void Model::SceneProcessing(const aiScene *scene) {
     NodeProcessing(scene->mRootNode, scene);
 }
@@ -69,26 +89,6 @@ GLuint LoadTexture(const char* pFile) {
     return textureID;
 }
 
-Model::Model(std::string pFile) {
-    Assimp::Importer importer;
-    unsigned int pFlag = aiProcess_CalcTangentSpace |
-                         aiProcess_Triangulate |
-                         aiProcess_JoinIdenticalVertices |
-                         aiProcess_SortByPType;
-
-    const aiScene *scene = importer.ReadFile(pFile, pFlag);
-
-    if (scene == nullptr) {
-        std::cout << importer.GetErrorString() << std::endl;
-        return;
-    }
-
-    std::replace(pFile.begin(), pFile.end(), '\\', '/');
-    _directory = pFile.substr(0, pFile.find_last_of('/') + 1);
-
-    SceneProcessing(scene);
-}
-
 std::vector<Texture> Model::LoadMaterialTextures(aiMaterial *material, aiTextureType textureType) {
     std::vector<Texture> textures;
     for(unsigned int i = 0; i < material->GetTextureCount(textureType); i++) {
@@ -114,5 +114,3 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial *material, aiTexture
     }
     return textures;
 }
-
-
