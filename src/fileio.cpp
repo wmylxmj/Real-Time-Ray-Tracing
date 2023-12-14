@@ -43,6 +43,40 @@ void Model::NodeProcessing(aiNode* node, const aiScene* scene) {
 }
 
 void Model::MeshProcessing(aiMesh* mesh, const aiScene* scene) {
+    std::vector<Vertex> vertices;
+    std::vector<GLuint> indices;
+    std::vector<Texture> textures;
+
+    for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+        Vertex vertex;
+
+        vertex.position.x = mesh->mVertices[i].x;
+        vertex.position.y = mesh->mVertices[i].y;
+        vertex.position.z = mesh->mVertices[i].z;
+
+        if (mesh->HasNormals()) {
+            vertex.normal.x = mesh->mNormals[i].x;
+            vertex.normal.y = mesh->mNormals[i].y;
+            vertex.normal.z = mesh->mNormals[i].z;
+        }
+        if (mesh->mTextureCoords[0]) {
+            vertex.textureCoord.x = mesh->mTextureCoords[0][i].x;
+            vertex.textureCoord.y = mesh->mTextureCoords[0][i].y;
+
+            vertex.tangent.x = mesh->mTangents[i].x;
+            vertex.tangent.y = mesh->mTangents[i].y;
+            vertex.tangent.z = mesh->mTangents[i].z;
+
+            vertex.bitangent.x = mesh->mBitangents[i].x;
+            vertex.bitangent.y = mesh->mBitangents[i].y;
+            vertex.bitangent.z = mesh->mBitangents[i].z;
+        }
+        else {
+            vertex.textureCoord = glm::vec2(0.0f, 0.0f);
+        }
+        vertices.push_back(vertex);
+    }
+
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
     std::vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE);
     std::vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR);
