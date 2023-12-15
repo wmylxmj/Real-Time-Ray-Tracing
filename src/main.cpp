@@ -34,6 +34,7 @@ int main() {
     }
 
     Model model(R"(G:\LearnOpenGL-master\LearnOpenGL-master\resources\objects\backpack\backpack.obj)");
+    std::cout << model.meshes.size() << std::endl;
 
     //消息循环
     while(!glfwWindowShouldClose(glfwWindow)) {
