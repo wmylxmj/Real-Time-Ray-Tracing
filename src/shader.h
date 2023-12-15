@@ -27,10 +27,10 @@ public:
     ~FragmentShader();
 };
 
-class Shader {
+class ShaderProgram {
 public:
     GLuint glID;
-    Shader(const char *pVertexShaderFile, const char *pFragmentShaderFile);
+    ShaderProgram(const char *pVertexShaderFile, const char *pFragmentShaderFile);
 };
 
 #endif //RTRT_SHADER_H

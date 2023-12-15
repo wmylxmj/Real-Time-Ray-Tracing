@@ -68,7 +68,7 @@ FragmentShader::~FragmentShader() {
     glDeleteShader(glID);
 }
 
-Shader::Shader(const char *pVertexShaderFile, const char *pFragmentShaderFile) {
+ShaderProgram::ShaderProgram(const char *pVertexShaderFile, const char *pFragmentShaderFile) {
     VertexShader vertexShader(pVertexShaderFile);
     FragmentShader fragmentShader(pFragmentShaderFile);
     glID = glCreateProgram();
@@ -77,7 +77,7 @@ Shader::Shader(const char *pVertexShaderFile, const char *pFragmentShaderFile) {
     glLinkProgram(glID);
 
     GLint success;
-    glGetProgramiv(glID, GL_LINK_STATUS, &success);
+    glGetProgramiv(glID, GL_COMPILE_STATUS, &success);
     if(!success) {
         GLchar infoLog[1024];
         glGetProgramInfoLog(glID, 1024, nullptr, infoLog);
