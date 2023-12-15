@@ -21,7 +21,9 @@ private:
 
 public:
     std::vector<Mesh> meshes;
+
     explicit Model(std::string pFile);
+    void draw(const Shader& shader);
 };
 
 #endif //RTRT_FILEIO_H

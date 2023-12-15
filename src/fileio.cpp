@@ -167,3 +167,9 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial *material, aiTexture
     }
     return textures;
 }
+
+void Model::draw(const Shader &shader) {
+    for (Mesh & mesh : meshes) {
+        mesh.draw(shader);
+    }
+}

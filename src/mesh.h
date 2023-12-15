@@ -36,12 +36,12 @@ public:
     GLuint VAO;
 
     Mesh(std::vector<Vertex> &&vertices, std::vector<GLuint> &&indices, std::vector<Texture> &&textures);
+    void draw(const Shader& shader);
 
 private:
     GLuint VBO, EBO;
 
     void setupGL();
-    void draw(const Shader& shader);
 };
 
 #endif //RTRT_MESH_H
