@@ -99,6 +99,8 @@ void Model::MeshProcessing(aiMesh* mesh, const aiScene* scene) {
 
     std::vector<Texture> ambientTextures = LoadMaterialTextures(material, aiTextureType_AMBIENT);
     textures.insert(textures.end(), ambientTextures.begin(), ambientTextures.end());
+
+    meshes.emplace_back(std::move(vertices), std::move(indices), std::move(textures));
 }
 
 GLuint LoadTexture(const char* pFile) {

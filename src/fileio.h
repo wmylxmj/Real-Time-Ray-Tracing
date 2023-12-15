@@ -20,8 +20,8 @@ private:
     std::vector<Texture> LoadMaterialTextures(aiMaterial *material, aiTextureType textureType);
 
 public:
+    std::vector<Mesh> meshes;
     explicit Model(std::string pFile);
-
 };
 
 #endif //RTRT_FILEIO_H
