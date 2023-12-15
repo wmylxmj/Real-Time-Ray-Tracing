@@ -39,7 +39,7 @@ public:
     ~FragmentShader();
 };
 
-class ShaderProgram : public Shader{
+class ShaderProgram : public Shader {
 public:
     ShaderProgram(const char *pVertexShaderFile, const char *pFragmentShaderFile);
 };
