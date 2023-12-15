@@ -140,7 +140,7 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial *material, aiTexture
         if (!loaded) {
             Texture texture;
             texture.pFile = _directory + pTexture.C_Str();
-            texture.id = LoadTexture(texture.pFile.data());
+            texture.glID = LoadTexture(texture.pFile.data());
             texture.type = textureType;
             textures.push_back(texture);
             _textures.push_back(texture);

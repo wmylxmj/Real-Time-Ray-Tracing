@@ -21,7 +21,7 @@ typedef struct {
 } Vertex;
 
 typedef struct {
-    GLuint id;
+    GLuint glID;
     aiTextureType type;
     std::string pFile;
 } Texture;
