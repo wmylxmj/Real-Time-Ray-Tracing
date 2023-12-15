@@ -43,6 +43,7 @@ void Model::NodeProcessing(aiNode* node, const aiScene* scene) {
 }
 
 void Model::MeshProcessing(aiMesh* mesh, const aiScene* scene) {
+
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices;
     std::vector<Texture> textures;
@@ -77,11 +78,27 @@ void Model::MeshProcessing(aiMesh* mesh, const aiScene* scene) {
         vertices.push_back(vertex);
     }
 
+    for(unsigned int i = 0; i < mesh->mNumFaces; i++)
+    {
+        aiFace face = mesh->mFaces[i];
+        for(unsigned int j = 0; j < face.mNumIndices; j++) {
+            indices.push_back(face.mIndices[j]);
+        }
+    }
+
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-    std::vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE);
-    std::vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR);
-    std::vector<Texture> normalMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT);
-    std::vector<Texture> heightMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT);
+
+    std::vector<Texture> diffuseTextures = LoadMaterialTextures(material, aiTextureType_DIFFUSE);
+    textures.insert(textures.end(), diffuseTextures.begin(), diffuseTextures.end());
+
+    std::vector<Texture> specularTextures = LoadMaterialTextures(material, aiTextureType_SPECULAR);
+    textures.insert(textures.end(), specularTextures.begin(), specularTextures.end());
+
+    std::vector<Texture> heightTextures = LoadMaterialTextures(material, aiTextureType_HEIGHT);
+    textures.insert(textures.end(), heightTextures.begin(), heightTextures.end());
+
+    std::vector<Texture> ambientTextures = LoadMaterialTextures(material, aiTextureType_AMBIENT);
+    textures.insert(textures.end(), ambientTextures.begin(), ambientTextures.end());
 }
 
 GLuint LoadTexture(const char* pFile) {
