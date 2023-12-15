@@ -7,7 +7,9 @@ add_executable(RTRT src/main.cpp
         src/fileio.cpp
         src/fileio.h
         src/mesh.cpp
-        src/mesh.h)
+        src/mesh.h
+        src/shader.cpp
+        src/shader.h)
 
 find_package(glad CONFIG REQUIRED)
 target_link_libraries(RTRT PRIVATE glad::glad)
