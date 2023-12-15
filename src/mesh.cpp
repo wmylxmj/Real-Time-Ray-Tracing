@@ -40,3 +40,35 @@ Mesh::Mesh(std::vector<Vertex> &&vertices, std::vector<GLuint> &&indices, std::v
     this->textures = textures;
     setupGL();
 }
+
+void Mesh::draw(const Shader &shader) {
+
+    unsigned int nDiffuse = 1;
+    unsigned int nSpecular = 1;
+    unsigned int nHeight = 1;
+    unsigned int nAmbient = 1;
+
+    for (GLint i = 0; i < textures.size(); i++)
+    {
+        glActiveTexture(GL_TEXTURE0 + i);
+
+        std::string name;
+        if(textures[i].type == aiTextureType_DIFFUSE)
+            name = "textureDiffuse" + std::to_string(nDiffuse++);
+        else if(textures[i].type == aiTextureType_SPECULAR)
+            name = "textureSpecular" + std::to_string(nSpecular++);
+        else if(textures[i].type == aiTextureType_HEIGHT)
+            name = "textureHeight" + std::to_string(nHeight++);
+        else if(textures[i].type == aiTextureType_AMBIENT)
+            name = "textureAmbient" + std::to_string(nAmbient++);
+
+        glUniform1i(glGetUniformLocation(shader.glID, name.c_str()), i);
+        glBindTexture(GL_TEXTURE_2D, textures[i].glID);
+    }
+
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+
+    glActiveTexture(GL_TEXTURE0);
+}

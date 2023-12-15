@@ -12,6 +12,8 @@
 #include <assimp/postprocess.h>
 #include <vector>
 
+#include "shader.h"
+
 typedef struct {
     glm::vec3 position;
     glm::vec3 normal;
@@ -37,7 +39,9 @@ public:
 
 private:
     GLuint VBO, EBO;
+
     void setupGL();
+    void draw(const Shader& shader);
 };
 
 #endif //RTRT_MESH_H
