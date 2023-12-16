@@ -11,7 +11,7 @@
 
 #define WINDOW_WIDTH_INIT 1920
 #define WINDOW_HEIGHT_INIT 1080
-#define MOUSE_SENSITIVITY 0.01f
+#define MOUSE_SENSITIVITY 0.005f
 #define CAMERA_MOVE_SPEED 2.5f
 
 Camera camera;
@@ -58,6 +58,16 @@ void KeyboardInputProcessing(GLFWwindow *glfwWindow) {
         camera.eyePosition -= deltaTime * CAMERA_MOVE_SPEED * camera.GetUpDirection();
 }
 
+void MouseScrollCallback(GLFWwindow* window, double dx, double dy) {
+    camera.fovy -= (float)(0.1 * dy);
+    if (camera.fovy < glm::radians(15.0f)) {
+        camera.fovy = glm::radians(15.0f);
+    }
+    if (camera.fovy > glm::radians(75.0f)) {
+        camera.fovy = glm::radians(75.0f);
+    }
+}
+
 void WindowResizeCallback(GLFWwindow *glfwWindow, int width, int height) {
     glViewport(0, 0, width, height);
 }
@@ -77,6 +87,7 @@ int main() {
     glfwMakeContextCurrent(glfwWindow);
     glfwSetFramebufferSizeCallback(glfwWindow, WindowResizeCallback);
     glfwSetCursorPosCallback(glfwWindow, MouseMoveCallback);
+    glfwSetScrollCallback(glfwWindow, MouseScrollCallback);
     glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
