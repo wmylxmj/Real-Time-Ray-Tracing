@@ -11,7 +11,7 @@
 
 #define WINDOW_WIDTH_INIT 1920
 #define WINDOW_HEIGHT_INIT 1080
-#define MOUSE_SENSITIVITY 0.1f
+#define MOUSE_SENSITIVITY 0.01f
 #define CAMERA_MOVE_SPEED 2.5f
 
 Camera camera;
@@ -52,6 +52,10 @@ void KeyboardInputProcessing(GLFWwindow *glfwWindow) {
         camera.eyePosition -= deltaTime * CAMERA_MOVE_SPEED * camera.GetRightDirection();
     if (glfwGetKey(glfwWindow, GLFW_KEY_D) == GLFW_PRESS)
         camera.eyePosition += deltaTime * CAMERA_MOVE_SPEED * camera.GetRightDirection();
+    if (glfwGetKey(glfwWindow, GLFW_KEY_SPACE) == GLFW_PRESS)
+        camera.eyePosition += deltaTime * CAMERA_MOVE_SPEED * camera.GetUpDirection();
+    if (glfwGetKey(glfwWindow, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        camera.eyePosition -= deltaTime * CAMERA_MOVE_SPEED * camera.GetUpDirection();
 }
 
 void WindowResizeCallback(GLFWwindow *glfwWindow, int width, int height) {
