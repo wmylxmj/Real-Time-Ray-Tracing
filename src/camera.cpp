@@ -5,12 +5,21 @@
 #include "camera.h"
 
 void Camera::RotateXY(float dThetaX, float dThetaY) {
-    float x = glm::sin(_gazeAngle.x);
-    float z = - glm::cos(_gazeAngle.x);
-    glm::mat4 rot = glm::mat4(1.0f);
-    rot = glm::rotate(rot, dThetaY, glm::vec3(z, 0, x));
-    rot = glm::rotate(rot, dThetaX, glm::vec3(0, 1, 0));
-    _coordinateSystem = rot * _coordinateSystem;
+    _gazeAngle.x += dThetaX;
+    _gazeAngle.y += dThetaY;
+    UpdateCoordinateSystem();
+}
+
+void Camera::UpdateCoordinateSystem() {
+    glm::vec3 gazeDirection;
+    gazeDirection.x = glm::sin(_gazeAngle.x) * glm::cos(_gazeAngle.y);
+    gazeDirection.z = -glm::cos(_gazeAngle.x) * glm::cos(_gazeAngle.y);
+    gazeDirection.y = glm::sin(_gazeAngle.y);
+    _w = -gazeDirection;
+    _v.x = glm::sin(_gazeAngle.x) * glm::cos(_gazeAngle.y + glm::radians(90.0f));
+    _v.z = -glm::cos(_gazeAngle.x) * glm::cos(_gazeAngle.y + glm::radians(90.0f));
+    _v.y = glm::sin(_gazeAngle.y + glm::radians(90.0f));
+    _u = glm::cross(_v, _w);;
 }
 
 glm::mat4 Camera::GetCameraMatrix() {
@@ -22,13 +31,13 @@ glm::mat4 Camera::GetPerspectiveMatrix() {
 }
 
 glm::vec3 Camera::GetFrontDirection() {
-    return - glm::vec3(glm::transpose(_coordinateSystem)[2]);
+    return - _w;
 }
 
 glm::vec3 Camera::GetUpDirection() {
-    return glm::vec3(glm::transpose(_coordinateSystem)[1]);
+    return _v;
 }
 
 glm::vec3 Camera::GetRightDirection() {
-    return glm::vec3(glm::transpose(_coordinateSystem)[0]);
+    return _u;
 }

@@ -11,7 +11,9 @@
 class Camera {
 private:
     glm::vec3 _gazeAngle = glm::vec3(0, 0, 0);
-    glm::mat4 _coordinateSystem = glm::mat4(1.0f);
+    glm::vec3 _u, _v, _w;
+
+    void UpdateCoordinateSystem();
 
 public:
     glm::vec3 eyePosition = glm::vec3(0, 0, 0);
