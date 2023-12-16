@@ -13,13 +13,13 @@ void Camera::RotateXY(float dThetaX, float dThetaY) {
 void Camera::UpdateCoordinateSystem() {
     glm::vec3 gazeDirection;
     gazeDirection.x = glm::sin(_gazeAngle.x) * glm::cos(_gazeAngle.y);
-    gazeDirection.z = -glm::cos(_gazeAngle.x) * glm::cos(_gazeAngle.y);
+    gazeDirection.z = - glm::cos(_gazeAngle.x) * glm::cos(_gazeAngle.y);
     gazeDirection.y = glm::sin(_gazeAngle.y);
-    _w = -gazeDirection;
+    _w = - gazeDirection;
     _v.x = glm::sin(_gazeAngle.x) * glm::cos(_gazeAngle.y + glm::radians(90.0f));
-    _v.z = -glm::cos(_gazeAngle.x) * glm::cos(_gazeAngle.y + glm::radians(90.0f));
+    _v.z = - glm::cos(_gazeAngle.x) * glm::cos(_gazeAngle.y + glm::radians(90.0f));
     _v.y = glm::sin(_gazeAngle.y + glm::radians(90.0f));
-    _u = glm::cross(_v, _w);;
+    _u = glm::cross(_v, _w);
 }
 
 glm::mat4 Camera::GetCameraMatrix() {
