@@ -9,7 +9,9 @@ add_executable(RTRT src/main.cpp
         src/mesh.cpp
         src/mesh.h
         src/shader.cpp
-        src/shader.h)
+        src/shader.h
+        src/camera.cpp
+        src/camera.h)
 
 find_package(glad CONFIG REQUIRED)
 target_link_libraries(RTRT PRIVATE glad::glad)
