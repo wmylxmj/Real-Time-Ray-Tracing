@@ -53,12 +53,15 @@ void Model::MeshProcessing(aiMesh* mesh, const aiScene* scene) {
 
     for(unsigned int i = 0; i < mesh->mNumFaces; i++) {
         aiFace face = mesh->mFaces[i];
-        Triangle triangle;
 
-        for (unsigned int j = 0; j < face.mNumIndices; j++) {
-            triangle.indices[j] = face.mIndices[j];
+        if (face.mNumIndices == 3) {
+            Triangle triangle;
+
+            for (unsigned int j = 0; j < face.mNumIndices; j++) {
+                triangle.indices[j] = face.mIndices[j];
+            }
+            triangles.push_back(triangle);
         }
-        triangles.push_back(triangle);
     }
     meshes.emplace_back(std::move(vertices), std::move(triangles));
 }
