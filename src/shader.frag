@@ -172,6 +172,7 @@ Ray getPixelRay() {
     return ray;
 }
 
+
 uint grayCode(uint i) {
     return i ^ (i >> 1);
 }
@@ -188,46 +189,85 @@ float sobol32(uint d, uint i) {
     return float(x) * (1.0f / float(0xFFFFFFFFU));
 }
 
+
+uint wang_hash(inout uint seed) {
+    seed = uint(seed ^ uint(61)) ^ uint(seed >> uint(16));
+    seed *= uint(9);
+    seed = seed ^ (seed >> 4);
+    seed *= uint(0x27d4eb2d);
+    seed = seed ^ (seed >> 15);
+    return seed;
+}
+
+vec2 CranleyPattersonRotation(vec2 Xi) {
+    uint seed = uint(
+    uint((pixel.x * 0.5 + 0.5) * viewport_size[0])  * uint(1973) +
+    uint((pixel.y * 0.5 + 0.5) * viewport_size[1]) * uint(9277) +
+    uint(1) * uint(26699)) | uint(1);
+
+    float w = float(wang_hash(seed)) / 4294967296.0;
+    float h = float(wang_hash(seed)) / 4294967296.0;
+
+    Xi.x += w;
+    if(Xi.x > 1) Xi.x -= 1;
+    if(Xi.x < 0) Xi.x += 1;
+
+    Xi.y += h;
+    if(Xi.y > 1) Xi.y -= 1;
+    if(Xi.y < 0) Xi.y += 1;
+
+    return Xi;
+}
+
+
 struct SampleResult {
     vec3 direction;
     float pdf;
 };
 
-SampleResult SampleHemisphere_CosineWeighted(float xi1, float xi2, vec3 n) {
+SampleResult SampleHemisphere_CosineWeighted(vec2 Xi, vec3 n) {
     vec3 w = normalize(n);
     vec3 helper = vec3(1, 0, 0);
     if (abs(w.x) > 0.999) helper = vec3(0, 1, 0);
     vec3 u = normalize(cross(w, helper));
     vec3 v = normalize(cross(w, u));
-    float x = cos(2 * PI * xi2) * sqrt(xi1);
-    float y = sin(2 * PI * xi2) * sqrt(xi1);
-    float z = sqrt(1 - xi1);
+    float x = cos(2 * PI * Xi.y) * sqrt(Xi.x);
+    float y = sin(2 * PI * Xi.y) * sqrt(Xi.x);
+    float z = sqrt(1 - Xi.x);
     SampleResult res;
     res.direction = x * u + y * v + z * w;
-    res.pdf = (1.0 / PI) * sqrt(1 - xi1);
+    res.pdf = (1.0 / PI) * sqrt(1 - Xi.x);
     return res;
 }
 
 vec3 RTAO(Ray ray, HitResult hitRes) {
     vec3 colorOut = vec3(0);
     vec3 colorHistory = vec3(1);
-    for (int bounce = 0; bounce < 1; bounce++) {
+    for (int bounce = 0; bounce < 2; bounce++) {
         vec3 hit_point = ray.direction * hitRes.t + ray.origin;
         Triangle hit_triangle = triangles[hitRes.triangle_index];
         vec3 p1 = vertices[hit_triangle.indices[0]].position;
         vec3 p2 = vertices[hit_triangle.indices[1]].position;
         vec3 p3 = vertices[hit_triangle.indices[2]].position;
-        vec3 n = normalize(cross(p2-p1, p3-p2));
-        if (dot(n, ray.direction) > 0) n = -n;
+        vec3 N = normalize(cross(p2-p1, p3-p2));
+        if (dot(N, ray.direction) > 0) N = -N;
+        vec3 V = - ray.direction;
+
+        vec2 Xi = vec2(sobol32(bounce*2+1, frameCount), sobol32(bounce*2+2, frameCount));
+        Xi = CranleyPattersonRotation(Xi);
+        SampleResult sampleRes = SampleHemisphere_CosineWeighted(Xi, N);
+        vec3 L = sampleRes.direction;
+
         Ray newRay;
-        newRay.origin = hit_point + 1e-6 * n;
-        SampleResult sampleRes = SampleHemisphere_CosineWeighted(sobol32(bounce*2+1, frameCount), sobol32(bounce*2+2, frameCount), n);
+        newRay.origin = hit_point + 1e-6 * L;
         newRay.direction = sampleRes.direction;
         HitResult newHitRes = hitBVH(newRay, 0);
+
         vec3 fr = vec3(1, 1, 1) / PI;
-        float cosine_wi = dot(normalize(newRay.direction), normalize(n));
+        float cosine_wi = max(0, dot(N, L));
         if (newHitRes.t == FLT_MAX) {
             colorOut += colorHistory * vec3(1, 1, 1) * fr * cosine_wi / sampleRes.pdf;
+            break;
         }
         ray = newRay;
         hitRes = newHitRes;
