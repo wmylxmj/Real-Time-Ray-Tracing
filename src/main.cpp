@@ -106,7 +106,7 @@ int main() {
 
     std::vector<unsigned int> sobol_v;
     for (unsigned int d = 1; d <= 8; d++) {
-        std::vector<unsigned int> direction_vector = generate_v32(d, R"(E:\RTRT\src\new-joe-kuo-6.21201)");
+        std::vector<unsigned int> direction_vector = generate_v32(d, R"(E:\RTRT\assets\new-joe-kuo-6.21201)");
         sobol_v.insert(sobol_v.end(), direction_vector.begin(), direction_vector.end());
     }
 
