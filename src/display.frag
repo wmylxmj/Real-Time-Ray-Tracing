@@ -5,5 +5,7 @@ in vec2 pixel;
 out vec4 FragColor;
 
 void main() {
-    FragColor = vec4(texture2D(frame, pixel.xy * 0.5 + 0.5).rgb, 1.0);
+    vec3 color = texture2D(frame, pixel.xy * 0.5 + 0.5).rgb;
+    color = pow(color, vec3(1.0 / 2.2));
+    FragColor = vec4(color, 1.0);
 }
