@@ -1,29 +1,28 @@
 //
-// Created by wmy on 2023/12/12.
+// Created by wmy on 2024/8/18.
 //
 
-#ifndef RTRT_FILEIO_H
-#define RTRT_FILEIO_H
+#ifndef LEARNINGCG_FILEIO_H
+#define LEARNINGCG_FILEIO_H
 
-#include <iostream>
+#include <string>
 #include <vector>
+#include <assimp/scene.h>
 #include "mesh.h"
 
 class Model {
-private:
-    std::string _directory;
-    std::vector<Texture> _textures;
-
-    void SceneProcessing(const aiScene* scene);
-    void NodeProcessing(aiNode* node, const aiScene* scene);
-    void MeshProcessing(aiMesh* mesh, const aiScene* scene);
-    std::vector<Texture> LoadMaterialTextures(aiMaterial *material, aiTextureType textureType);
-
 public:
     std::vector<Mesh> meshes;
 
-    explicit Model(std::string pFile);
-    void draw(const Shader& shader);
+    explicit Model(const std::string& pFile);
+
+private:
+
+    void SceneProcessing(const aiScene *scene);
+
+    void NodeProcessing(aiNode *node, const aiScene *scene);
+
+    void MeshProcessing(aiMesh *mesh, const aiScene *scene);
 };
 
-#endif //RTRT_FILEIO_H
+#endif //LEARNINGCG_FILEIO_H

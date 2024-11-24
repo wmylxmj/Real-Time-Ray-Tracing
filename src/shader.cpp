@@ -4,6 +4,8 @@
 
 #include "shader.h"
 
+#include <memory>
+
 VertexShader::VertexShader(const char *pFile) {
     std::string code;
     std::ifstream file;
@@ -19,6 +21,7 @@ VertexShader::VertexShader(const char *pFile) {
         std::cout << e.what() << std::endl;
     }
     glID = glCreateShader(GL_VERTEX_SHADER);
+
     const char* shaderCode = code.c_str();
     glShaderSource(glID, 1, &shaderCode, nullptr);
     glCompileShader(glID);
@@ -26,8 +29,11 @@ VertexShader::VertexShader(const char *pFile) {
     GLint success;
     glGetShaderiv(glID, GL_COMPILE_STATUS, &success);
     if(!success) {
-        GLchar infoLog[1024];
-        glGetShaderInfoLog(glID, 1024, nullptr, infoLog);
+        GLint logLength;
+        glGetShaderiv(glID, GL_INFO_LOG_LENGTH, &logLength);
+
+        GLchar* infoLog = (GLchar*)alloca(logLength * sizeof(GLchar));
+        glGetShaderInfoLog(glID, logLength, nullptr, infoLog);
         std::cout << infoLog << std::endl;
     }
 }
@@ -58,8 +64,11 @@ FragmentShader::FragmentShader(const char *pFile) {
     GLint success;
     glGetShaderiv(glID, GL_COMPILE_STATUS, &success);
     if(!success) {
-        GLchar infoLog[1024];
-        glGetShaderInfoLog(glID, 1024, nullptr, infoLog);
+        GLint logLength;
+        glGetShaderiv(glID, GL_INFO_LOG_LENGTH, &logLength);
+
+        GLchar* infoLog = (GLchar*)alloca(logLength * sizeof(GLchar));
+        glGetShaderInfoLog(glID, logLength, nullptr, infoLog);
         std::cout << infoLog << std::endl;
     }
 }
@@ -79,14 +88,21 @@ ShaderProgram::ShaderProgram(const char *pVertexShaderFile, const char *pFragmen
     GLint success;
     glGetProgramiv(glID, GL_COMPILE_STATUS, &success);
     if(!success) {
-        GLchar infoLog[1024];
-        glGetProgramInfoLog(glID, 1024, nullptr, infoLog);
+        GLint logLength;
+        glGetProgramiv(glID, GL_INFO_LOG_LENGTH, &logLength);
+
+        GLchar* infoLog = (GLchar*)alloca(logLength * sizeof(GLchar));
+        glGetProgramInfoLog(glID, logLength, nullptr, infoLog);
         std::cout << infoLog << std::endl;
     }
 }
 
 void Shader::SetInt(const std::string &name, int value) const {
     glUniform1i(glGetUniformLocation(glID, name.c_str()), value);
+}
+
+void Shader::SetUint(const std::string &name, unsigned int value) const {
+    glUniform1ui(glGetUniformLocation(glID, name.c_str()), value);
 }
 
 void Shader::SetFloat(const std::string &name, float value) const {

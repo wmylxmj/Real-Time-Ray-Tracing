@@ -1,47 +1,47 @@
 //
-// Created by wmy on 2023/12/14.
+// Created by wmy on 2024/8/18.
 //
 
-#ifndef RTRT_MESH_H
-#define RTRT_MESH_H
+#ifndef LEARNINGCG_MESH_H
+#define LEARNINGCG_MESH_H
 
 #include <glm/glm.hpp>
-#include <glad/glad.h>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 #include <vector>
-
-#include "shader.h"
 
 typedef struct {
     glm::vec3 position;
-    glm::vec3 normal;
-    glm::vec2 textureCoord;
-    glm::vec3 tangent;
-    glm::vec3 bitangent;
 } Vertex;
 
 typedef struct {
-    GLuint glID;
-    aiTextureType type;
-    std::string pFile;
-} Texture;
+    unsigned int indices[3];
+} Triangle;
 
 class Mesh {
 public:
     std::vector<Vertex> vertices;
-    std::vector<GLuint> indices;
-    std::vector<Texture> textures;
-    GLuint VAO;
+    std::vector<Triangle> triangles;
 
-    Mesh(std::vector<Vertex> &&vertices, std::vector<GLuint> &&indices, std::vector<Texture> &&textures);
-    void draw(const Shader& shader);
-
-private:
-    GLuint VBO, EBO;
-
-    void setupGL();
+    explicit Mesh(std::vector<Vertex> &&vertices, std::vector<Triangle> &&triangles);
 };
 
-#endif //RTRT_MESH_H
+
+
+
+typedef struct {
+    glm::vec4 position;
+} VertexStd430;
+
+extern VertexStd430 Vertex2VertexStd430(const Vertex& vertex);
+extern std::vector<VertexStd430> Vertices2VerticesStd430(const std::vector<Vertex>& vertices);
+
+typedef struct {
+    unsigned int indices[3];
+    unsigned int padding;
+} TriangleStd430;
+
+extern TriangleStd430 Triangle2TriangleStd430(const Triangle& triangle);
+extern std::vector<TriangleStd430> Triangles2TrianglesStd430(const std::vector<Triangle>& triangles);
+
+
+
+#endif //LEARNINGCG_MESH_H
