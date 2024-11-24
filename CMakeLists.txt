@@ -18,7 +18,7 @@ add_executable(RTRT src/main.cpp
         src/obb.h
         src/sobol.cpp
         src/sobol.h
-        src/svpng.inc)
+        lib/svpng.inc)
 
 find_package(glad CONFIG REQUIRED)
 target_link_libraries(RTRT PRIVATE glad::glad)

@@ -16,7 +16,7 @@ add_executable(CppCG main.cpp
         obb.h
         bvh.cpp
         bvh.h
-        svpng.inc
+        ../lib/svpng.inc
         sobol.cpp
         sobol.h)
 
